@@ -286,6 +286,29 @@ textarea{min-height:76px;resize:vertical}
 @media (max-width:820px){.wk{grid-template-columns:minmax(0,1fr)}.wkd{display:grid;grid-template-columns:70px minmax(0,1fr);align-items:start}.wkd .lv{grid-column:1}.wkd ul{grid-column:2;grid-row:1/span 2}}
 .ro form,.ro .ghost.danger{display:none!important}
 .ro .chk,.ro .st,.ro .stars button{pointer-events:none}
+.ap{display:flex;flex-direction:column;gap:14px}
+.apyr{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:start}
+.apyr>.yl{padding-top:6px}
+.apyr>.yl b{display:block;font:900 1.3rem/1 var(--display);text-transform:uppercase;letter-spacing:.03em}
+.apyr>.yl span{font-size:.8rem;color:var(--muted)}
+.apterms{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.apt{background:var(--sunk);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.apt.cur{outline:2px solid var(--school);background:color-mix(in oklab,var(--school) 10%,var(--surface))}
+.apt.empty2{background:none;border:1px dashed var(--line)}
+.apt .th{display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex-wrap:wrap}
+.apt .th b{font:800 .95rem var(--display);text-transform:uppercase;letter-spacing:.05em}
+.apt .th span{font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.crs{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 8px;align-items:baseline;padding:6px 8px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
+.crs .cc2{font:900 .9rem var(--display);letter-spacing:.04em;white-space:nowrap}
+.crs .nm{font-size:.8rem;line-height:1.25;overflow-wrap:break-word;min-width:0}
+.crs.mj{border-color:color-mix(in oklab,var(--school) 55%,var(--surface))}
+.crs.mj .cc2{color:var(--school)}
+.crs.done{opacity:.72}
+.crs.done .cc2::after{content:" ✓";color:var(--good)}
+.crs.dim{opacity:.25}
+.apkey{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.apkey i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+@media (max-width:1000px){.apyr{grid-template-columns:minmax(0,1fr)}.apterms{grid-template-columns:minmax(0,1fr)}}
 #savest{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:.75rem;color:var(--muted);z-index:40}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:65}
 .skel{height:120px;border-radius:12px;background:var(--sunk)}
@@ -375,8 +398,8 @@ const ICON={
 };
 const HYPE=["Lock in. Every rep, every problem set, every point counts.","Outside hitters don't wait for the perfect set. Go get it.","Discipline today, branch choice tomorrow. Stack the wins.","Small gains, big season. Let's work.","The Corps is watching. So is the scoreboard. Bring it.","Be the captain before anyone hands you the armband.","Optimize everything: sleep, study, swings.","Strong body, sharp mind, loud bench. Let's go.","Make today a highlight reel.","Pressure is a privilege. Attack it."];
 /* ---------- state ---------- */
-const DOCS=["calendar","school","vb","fit","about","home","daily","resume","trips","week"];
-const EMPTY={calendar:{events:[]},school:{courses:[],grades:{}},vb:{tournaments:[],notes:[]},fit:{goals:[],prs:[]},about:{places:[],travel:[],photos:[],goals:[]},home:{countdowns:[]},daily:{editions:[]},trips:{trips:[]},week:{weeks:[]},resume:{name:"",headline:"",email:"",phone:"",location:"",education:[],leadership:[],training:[],awards:[],summers:[]}};
+const DOCS=["calendar","school","vb","fit","about","home","daily","resume","trips","week","plan"];
+const EMPTY={calendar:{events:[]},school:{courses:[],grades:{}},vb:{tournaments:[],notes:[]},fit:{goals:[],prs:[]},about:{places:[],travel:[],photos:[],goals:[]},home:{countdowns:[]},daily:{editions:[]},trips:{trips:[]},week:{weeks:[]},plan:{terms:[]},resume:{name:"",headline:"",email:"",phone:"",location:"",education:[],leadership:[],training:[],awards:[],summers:[]}};
 const S={db:null,uid:null,mode:"loading",docs:JSON.parse(JSON.stringify(EMPTY)),
   strava:{status:"waiting",acts:[],err:null,storedAt:null,sets:{},setsStatus:"idle"},
   mcp:null,sample:null,assets:null,
@@ -619,6 +642,8 @@ function eventRow(e,compact){
 function viewSchool(v){
   const ev=S.docs.calendar.events;
   v.append(h("header",null,h("div",{class:"eyebrow",style:"--c:var(--school)"},"AY 27-1 · Fall semester"),h("h1",null,"School"),h("p",{class:"sub"},"Every due date, test and brief through TEE week. Check things off, log scores, and watch your grades update."+(S.docs.school.syncedAt?` Grades last synced from Canvas ${fmtD(S.docs.school.syncedAt)}.`:"")+(S.docs.school.syncNote?" "+S.docs.school.syncNote:""))));
+  v.append(h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{type:"button",class:"btn",style:"--c:var(--school)","aria-expanded":String(!!S.ui.showPlan),onclick:()=>{S.ui.showPlan=!S.ui.showPlan;render()}},S.ui.showPlan?"Hide academic plan":"Academic plan · all 4 years")));
+  if(S.ui.showPlan)v.append(planCard());
   /* tests strip */
   const tests=ev.filter(e=>e.kind==="test"&&until(e.date)>=0).sort((a,b)=>pd(a.date)-pd(b.date)).slice(0,4);
   const ts=h("section",{class:"grid g4"});
@@ -1150,6 +1175,40 @@ function weekCard(w,compact){
   if(w.games&&w.games.length)ft.append(h("div",{class:"stat"},h("div",{class:"k",style:"margin:0 0 6px"},"Games this week"),h("div",{style:"display:flex;flex-direction:column;gap:6px;font-size:.88rem"},w.games.map(g=>h("div",null,h("b",null,g.team+": "),g.text)))));
   if(w.weather)ft.append(h("div",{class:"stat"},h("div",{class:"k",style:"margin:0 0 6px"},"Weather outlook"),h("div",{style:"font-size:.88rem"},w.weather)));
   if(ft.children.length)c.append(ft);
+  return c
+}
+/* ---------- ACADEMIC PLAN ---------- */
+function termInfo(id){const[y,t]=id.split("-").map(Number);
+  if(t===0)return{label:`Summer ${y-1}`,start:new Date(y-1,5,1),end:new Date(y-1,7,14)};
+  if(t===1)return{label:`Fall ${y-1}`,start:new Date(y-1,7,15),end:new Date(y-1,11,31)};
+  return{label:`Spring ${y}`,start:new Date(y,0,1),end:new Date(y,4,31)}}
+function termStatus(id){const i=termInfo(id),t=t0();return t>i.end?"done":t>=i.start?"now":"next"}
+const CLASS_YEARS={"2025":["Plebe year","2024–25"],"2026":["Yearling year","2025–26"],"2027":["Cow year","2026–27"],"2028":["Firstie year","2027–28"]};
+function planCard(){
+  const T=S.docs.plan.terms||[];const c=h("section",{class:"card",style:"--c:var(--school)"});
+  c.append(h("div",{class:"card-h"},h("div",null,h("div",{class:"eyebrow",style:"--c:var(--school)"},"B.S. Operations Research · Class of 2028"),h("h2",null,"Academic plan")),
+    h("div",{class:"chips"},[["all","All courses"],["major","Major only"]].map(([k,l])=>h("button",{type:"button",class:"chip","aria-pressed":String((S.ui.planF||"all")===k),style:"--c:var(--school)",onclick:()=>{S.ui.planF=k;render()}},l)))));
+  if(!T.length){c.append(h("div",{class:"empty"},"Your academic plan will show here."));return c}
+  const all=T.flatMap(t=>t.courses.map(x=>({...x,st:termStatus(t.id)})));
+  const n=k=>all.filter(x=>x.st===k).length,cr=k=>T.filter(t=>termStatus(t.id)===k).reduce((a,t)=>a+(t.credits||0),0);
+  const total=S.docs.plan.total||T.reduce((a,t)=>a+(t.credits||0),0),doneCr=cr("done"),mj=all.filter(x=>x.major),mjDone=mj.filter(x=>x.st==="done").length;
+  c.append(h("div",{class:"grid g4",style:"margin-bottom:16px"},
+    h("div",{class:"stat",style:"--c:var(--good)"},h("div",{class:"v"},n("done")),h("div",{class:"k"},"courses completed")),
+    h("div",{class:"stat",style:"--c:var(--school)"},h("div",{class:"v"},n("now")),h("div",{class:"k"},"in progress this semester")),
+    h("div",{class:"stat"},h("div",{class:"v"},n("next")),h("div",{class:"k"},`still to take · ${all.length} total`)),
+    h("div",{class:"stat",style:"--c:var(--school)"},h("div",{class:"v"},`${Math.round(doneCr/total*100)}%`),h("div",{class:"k"},`${doneCr} of ${total} credit hours done · ${mjDone}/${mj.length} major courses`))));
+  const f=S.ui.planF||"all";const ap=h("div",{class:"ap"});
+  const years=[...new Set(T.map(t=>t.id.split("-")[0]))];
+  for(const y of years){const cy=CLASS_YEARS[y]||[`AY ${y}`,""];const row=h("div",{class:"apterms"});
+    for(const k of ["0","1","2"]){const t=T.find(x=>x.id===`${y}-${k}`);
+      if(!t){row.append(h("div",{class:"apt empty2"},h("div",{class:"th"},h("b",null,termInfo(`${y}-${k}`).label.split(" ")[0]),h("span",null,"—")),h("div",{class:"muted",style:"font-size:.8rem"},"No summer course")));continue}
+      const st=termStatus(t.id),inf=termInfo(t.id);
+      const box=h("div",{class:"apt"+(st==="now"?" cur":"")},h("div",{class:"th"},h("b",null,inf.label),h("span",null,`${t.id} · ${t.credits} cr`)),
+        st==="now"?h("span",{class:"pill c",style:"--c:var(--school);align-self:flex-start"},"In progress"):st==="done"?h("span",{class:"pill ok",style:"align-self:flex-start"},"Completed"):null);
+      for(const x of t.courses)box.append(h("div",{class:"crs"+(x.major?" mj":"")+(st==="done"?" done":"")+(f==="major"&&!x.major?" dim":""),"data-tip":`${x.code}: ${x.name}${x.major?" · major course":""}`},h("span",{class:"cc2"},x.code),h("span",{class:"nm"},x.name)));
+      row.append(box)}
+    ap.append(h("div",{class:"apyr"},h("div",{class:"yl"},h("b",null,cy[0]),h("span",null,cy[1])),row))}
+  c.append(ap,h("div",{class:"apkey",style:"margin-top:12px"},h("span",null,h("i",{style:"background:color-mix(in oklab,var(--school) 55%,var(--surface))"}),"Major course"),h("span",null,"✓ Completed"),h("span",null,h("i",{style:"outline:2px solid var(--school)"}),"Current semester"),h("span",null,"Course names from the West Point Redbook")));
   return c
 }
 /* ---------- theme ---------- */

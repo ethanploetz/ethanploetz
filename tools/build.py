@@ -17,7 +17,7 @@ booking confirmation numbers and uploaded photos.
 import argparse, datetime, json, os, re, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DOCS = ["calendar", "school", "vb", "fit", "about", "home", "daily", "resume", "trips", "week"]
+DOCS = ["calendar", "school", "vb", "fit", "about", "home", "daily", "resume", "trips", "week", "plan"]
 LOGI = re.compile(r"\b(CGR|CPRA|LGA|SNA|CMH|flight|hotel|uniform|leave CGR|ETA|W/G|black jacket|fly|flies|departure|depart)\b", re.I)
 
 
