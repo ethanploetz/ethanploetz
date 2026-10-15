@@ -1038,7 +1038,7 @@ function nextTrip(){return (S.docs.trips.trips||[]).filter(t=>until(t.end)>=0).s
 function travelMeta(){const t=nextTrip();return t?(until(t.start)<=0?"Now":`${until(t.start)}d`):""}
 const tripDays=t=>dayDiff(pd(t.start),pd(t.end))+1;
 const fmtRange=t=>`${fmtD(t.start)} – ${fmtD(t.end)}${pd(t.end).getFullYear()!==t0().getFullYear()?" "+pd(t.end).getFullYear():""}`;
-function coverStyle(t){return t.cover?`background-image:linear-gradient(transparent,transparent),url('/_blob/${t.cover}')`:""}
+function coverStyle(t){if(!t.cover)return "";const src=/^(https?:|covers\/)/.test(t.cover)?t.cover:"/_blob/"+t.cover;return `background-image:linear-gradient(transparent,transparent),url('${src}')`}
 function saveTrips(){save("trips")}
 function viewTravel(v){
   const T=S.docs.trips.trips||[];

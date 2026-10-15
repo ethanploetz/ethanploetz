@@ -64,7 +64,9 @@ def sanitize(docs):
         for t in tr.get("trips", []):
             for b in t.get("bookings", []):
                 b.pop("conf", None)
-            t["photos"] = []; t["cover"] = None
+            t["photos"] = []
+            c = t.get("cover")
+            t["cover"] = ("covers/%s.jpg" % c) if c and os.path.exists(os.path.join(HERE, "..", "covers", "%s.jpg" % c)) else None
     ab = docs.get("about")
     if ab:
         ab["photos"] = []
