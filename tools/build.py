@@ -17,7 +17,7 @@ booking confirmation numbers and uploaded photos.
 import argparse, datetime, json, os, re, subprocess, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DOCS = ["calendar", "school", "vb", "fit", "about", "home", "daily", "resume", "trips", "week", "plan"]
+DOCS = ["calendar", "school", "vb", "fit", "about", "home", "daily", "resume", "trips", "week", "plan", "projects", "movies"]
 LOGI = re.compile(r"\b(CGR|CPRA|LGA|SNA|CMH|flight|hotel|uniform|leave CGR|ETA|W/G|black jacket|fly|flies|departure|depart)\b", re.I)
 
 
@@ -67,6 +67,11 @@ def sanitize(docs):
             t["photos"] = []
             c = t.get("cover")
             t["cover"] = ("covers/%s.jpg" % c) if c and os.path.exists(os.path.join(HERE, "..", "covers", "%s.jpg" % c)) else None
+    pj = docs.get("projects")
+    if pj:
+        for p in pj.get("projects", []):
+            c = p.get("cover")
+            p["cover"] = ("covers/%s.jpg" % c) if c and os.path.exists(os.path.join(HERE, "..", "covers", "%s.jpg" % c)) else None
     ab = docs.get("about")
     if ab:
         ab["photos"] = []

@@ -9,7 +9,7 @@
   --bg:#FCF6F2; --surface:#FFFFFF; --sunk:#F7ECE5; --ink:#2B1813; --muted:#7D6157; --line:#EEDCD2;
   --school:#B86A00; --vb:#E2470F; --fit:#D3263A; --about:#BF2C72;
   --sun1:#FF7A2E; --sun2:#EC3B4B; --sun3:#B5236C; --on-sun:#FFFFFF;
-  --good:#1E8A4C; --warn:#C27A00; --bad:#C62828; --on-c:#FFFFFF;
+  --good:#1E8A4C; --warn:#C27A00; --bad:#C62828; --on-c:#FFFFFF; --pA:#E2470F; --pB:#7B3FC4;
   --display:"Big Shoulders Display","Arial Narrow","Helvetica Neue",Arial,sans-serif;
   --body:"Figtree","Segoe UI","Helvetica Neue",Arial,sans-serif;
   --r:12px;
@@ -18,12 +18,12 @@
   --bg:#170F0D; --surface:#221613; --sunk:#2B1D19; --ink:#F8ECE6; --muted:#BC9D91; --line:#3C2A24;
   --school:#FFB547; --vb:#FF7A45; --fit:#FF5C6A; --about:#F2669F;
   --sun1:#E8641E; --sun2:#C92C42; --sun3:#8E1B57; --on-sun:#FFFFFF;
-  --good:#4CC27F; --warn:#F2B13C; --bad:#FF6B6B; --on-c:#1A0F0C; color-scheme:dark}}
+  --good:#4CC27F; --warn:#F2B13C; --bad:#FF6B6B; --on-c:#1A0F0C; --pA:#E25A22; --pB:#9467E6; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#170F0D; --surface:#221613; --sunk:#2B1D19; --ink:#F8ECE6; --muted:#BC9D91; --line:#3C2A24;
   --school:#FFB547; --vb:#FF7A45; --fit:#FF5C6A; --about:#F2669F;
   --sun1:#E8641E; --sun2:#C92C42; --sun3:#8E1B57; --on-sun:#FFFFFF;
-  --good:#4CC27F; --warn:#F2B13C; --bad:#FF6B6B; --on-c:#1A0F0C; color-scheme:dark}
+  --good:#4CC27F; --warn:#F2B13C; --bad:#FF6B6B; --on-c:#1A0F0C; --pA:#E25A22; --pB:#9467E6; color-scheme:dark}
 *,*::before,*::after{box-sizing:border-box}
 html,body{min-height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
@@ -309,6 +309,29 @@ textarea{min-height:76px;resize:vertical}
 .apkey{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
 .apkey i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 @media (max-width:1000px){.apyr{grid-template-columns:minmax(0,1fr)}.apterms{grid-template-columns:minmax(0,1fr)}}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+.mvt{width:100%;border-collapse:collapse;font-size:.9rem;min-width:620px}
+.mvt th{text-align:left;padding:8px 8px;border-bottom:2px solid var(--line);white-space:nowrap}
+.mvt th button{all:unset;cursor:pointer;font:700 .76rem var(--body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.mvt th button[aria-sort]{color:var(--ink)}
+.mvt th button:focus-visible{outline:2px solid var(--vb)}
+.mvt td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.mvt td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.mvt .ttl{font-weight:700}
+.sc{display:flex;align-items:center;gap:8px;min-width:96px}
+.sc b{font:800 1rem var(--display);font-variant-numeric:tabular-nums;width:30px}
+.sc i{display:block;height:6px;border-radius:99px;background:var(--c)}
+.sc .tr{flex:1;height:6px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.verdict{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.vd{padding:14px;border-radius:12px;background:var(--sunk);display:flex;flex-direction:column;gap:4px;min-width:0}
+.vd .t2{font:900 1.35rem/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em;overflow-wrap:break-word}
+.vd .s2{font-size:.84rem;color:var(--muted)}
+.vs{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:center}
+.vs .vsd{padding:16px;border-radius:12px;background:var(--sunk);min-width:0}
+.vs .vsd .v{font:900 3rem/1 var(--display);font-variant-numeric:tabular-nums;color:var(--c)}
+.vs .mid{font:900 1.6rem var(--display);color:var(--muted)}
+@media (max-width:1000px){.verdict{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.verdict{grid-template-columns:minmax(0,1fr)}.vs{grid-template-columns:minmax(0,1fr)}.vs .mid{text-align:center}}
 #savest{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:.75rem;color:var(--muted);z-index:40}
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:65}
 .skel{height:120px;border-radius:12px;background:var(--sunk)}
@@ -380,6 +403,7 @@ const monday=d=>{const x=new Date(d);x.setHours(0,0,0,0);const k=(x.getDay()+6)%
 const when=n=>n===0?"Today":n===1?"Tomorrow":n<0?`${-n}d ago`:`in ${n}d`;
 const use=n=>{try{return window.claude&&window.claude.use?window.claude.use(n).catch(()=>null):Promise.resolve(null)}catch(e){return Promise.resolve(null)}};
 const ICON={
+ film:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>',
  plane:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 13.5l19-8-5.5 15-3.5-5.5z"/><path d="M12.5 15l9-9.5"/></svg>',
  bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.8"/></svg>',
  car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v2H3z"/><circle cx="7.5" cy="13" r=".8"/><circle cx="16.5" cy="13" r=".8"/></svg>',
@@ -398,8 +422,8 @@ const ICON={
 };
 const HYPE=["Lock in. Every rep, every problem set, every point counts.","Outside hitters don't wait for the perfect set. Go get it.","Discipline today, branch choice tomorrow. Stack the wins.","Small gains, big season. Let's work.","The Corps is watching. So is the scoreboard. Bring it.","Be the captain before anyone hands you the armband.","Optimize everything: sleep, study, swings.","Strong body, sharp mind, loud bench. Let's go.","Make today a highlight reel.","Pressure is a privilege. Attack it."];
 /* ---------- state ---------- */
-const DOCS=["calendar","school","vb","fit","about","home","daily","resume","trips","week","plan"];
-const EMPTY={calendar:{events:[]},school:{courses:[],grades:{}},vb:{tournaments:[],notes:[]},fit:{goals:[],prs:[]},about:{places:[],travel:[],photos:[],goals:[]},home:{countdowns:[]},daily:{editions:[]},trips:{trips:[]},week:{weeks:[]},plan:{terms:[]},resume:{name:"",headline:"",email:"",phone:"",location:"",education:[],leadership:[],training:[],awards:[],summers:[]}};
+const DOCS=["calendar","school","vb","fit","about","home","daily","resume","trips","week","plan","projects","movies"];
+const EMPTY={calendar:{events:[]},school:{courses:[],grades:{}},vb:{tournaments:[],notes:[]},fit:{goals:[],prs:[]},about:{places:[],travel:[],photos:[],goals:[]},home:{countdowns:[]},daily:{editions:[]},trips:{trips:[]},week:{weeks:[]},plan:{terms:[]},projects:{projects:[]},movies:{a:{name:"Ethan",alias:"Carl"},b:{name:"Ramon",alias:"Francisco"},list:[]},resume:{name:"",headline:"",email:"",phone:"",location:"",education:[],leadership:[],training:[],awards:[],summers:[]}};
 const S={db:null,uid:null,mode:"loading",docs:JSON.parse(JSON.stringify(EMPTY)),
   strava:{status:"waiting",acts:[],err:null,storedAt:null,sets:{},setsStatus:"idle"},
   mcp:null,sample:null,assets:null,
@@ -439,7 +463,7 @@ function place(e){tip.style.left=Math.min(innerWidth-130,Math.max(130,e.clientX)
 /* armed two-step deletes */
 function delBtn(key,label,fn){const armed=S.ui.armed===key;return h("button",{type:"button",class:"ghost danger",onclick:e=>{e.stopPropagation();if(armed){S.ui.armed=null;fn();}else{S.ui.armed=key;setTimeout(()=>{if(S.ui.armed===key){S.ui.armed=null;rerender()}},4000)}render()}},armed?"Confirm delete":label||"Delete")}
 /* ---------- routing ---------- */
-const ROUTES=[{id:"home",name:"Home",icon:"home",c:"var(--vb)"},{id:"daily",name:"Daily Read",icon:"news",c:"var(--school)"},{id:"school",name:"School",icon:"school",c:"var(--school)"},{id:"volleyball",name:"Volleyball",icon:"vb",c:"var(--vb)"},{id:"fitness",name:"Fitness",icon:"fit",c:"var(--fit)"},{id:"travel",name:"Travel",icon:"plane",c:"var(--about)"},{id:"about",name:"About Me",icon:"about",c:"var(--about)"}];
+const ROUTES=[{id:"home",name:"Home",icon:"home",c:"var(--vb)"},{id:"daily",name:"Daily Read",icon:"news",c:"var(--school)"},{id:"school",name:"School",icon:"school",c:"var(--school)"},{id:"volleyball",name:"Volleyball",icon:"vb",c:"var(--vb)"},{id:"fitness",name:"Fitness",icon:"fit",c:"var(--fit)"},{id:"travel",name:"Travel",icon:"plane",c:"var(--about)"},{id:"projects",name:"Projects",icon:"film",c:"var(--vb)"},{id:"about",name:"About Me",icon:"about",c:"var(--about)"}];
 function go(r){S.route=r;S.ui.armed=null;try{history.replaceState(null,"","#"+r)}catch(e){}try{localStorage.setItem("hub:route",r)}catch(e){}render();scrollTo(0,0)}
 let pendingRender=false;
 function rerender(){const a=document.activeElement;if(a&&$("#view").contains(a)&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)){pendingRender=true;return}render()}
@@ -449,12 +473,12 @@ function render(){setTimeout(roPass,0);renderNav();const v=$("#view");v.replaceC
   if(S.mode==="loading"){v.append(h("div",{class:"skel"}),h("div",{class:"skel"}));return}
   if(S.mode==="local")v.append(h("div",{class:"banner"},"Open this page in Claude while signed in to load your saved data. Changes here stay on this device."));
   if(S.mode==="snapshot")v.append(h("div",{class:"banner"},`Read-only copy, updated ${fmtD(SNAP.builtAt.slice(0,10))} at ${SNAP.builtAt.slice(11,16)}. Make changes in your Claude hub.`));
-  ({home:viewHome,daily:viewDaily,school:viewSchool,volleyball:viewVB,fitness:viewFit,travel:viewTravel,about:viewAbout})[S.route](v)}
+  ({home:viewHome,daily:viewDaily,school:viewSchool,volleyball:viewVB,fitness:viewFit,travel:viewTravel,projects:viewProjects,about:viewAbout})[S.route](v)}
 function renderNav(){
   const n=$("#nav");n.replaceChildren();
   const ev=S.docs.calendar.events,soon=ev.filter(e=>isTask(e)&&!e.done&&until(e.date)>=0&&until(e.date)<=7).length;
   const nt=nextTour(),fx=fitStats();
-  const meta={home:"",daily:dailyMeta(),travel:travelMeta(),school:soon?`${soon} this week`:"",volleyball:nt?(until(nt.start)<=0?"Game day":`${until(nt.start)}d`):"",fitness:fx?`${fx.weekStreak}wk streak`:"",about:S.docs.about.places.length?`${S.docs.about.places.length} homes`:""};
+  const meta={home:"",daily:dailyMeta(),travel:travelMeta(),projects:(S.docs.projects.projects||[]).length?`${S.docs.projects.projects.length}`:"",school:soon?`${soon} this week`:"",volleyball:nt?(until(nt.start)<=0?"Game day":`${until(nt.start)}d`):"",fitness:fx?`${fx.weekStreak}wk streak`:"",about:S.docs.about.places.length?`${S.docs.about.places.length} homes`:""};
   for(const r of ROUTES)n.append(h("button",{type:"button","aria-current":S.route===r.id?"page":null,onclick:()=>go(r.id)},h("span",{class:"lbl",html:ICON[r.icon]+`<span>${r.name}</span>`}),h("span",{class:"meta"},meta[r.id])));
   const d=until(iso(GRAD));
   $("#sidefoot").replaceChildren(h("div",{class:"cap"},"Graduation"),h("div",{class:"big"},d.toLocaleString()),h("div",{class:"cap"},"days · 20 May 2028"),h("div",{class:"syncline"},stravaLine()));
@@ -1210,6 +1234,101 @@ function planCard(){
     ap.append(h("div",{class:"apyr"},h("div",{class:"yl"},h("b",null,cy[0]),h("span",null,cy[1])),row))}
   c.append(ap,h("div",{class:"apkey",style:"margin-top:12px"},h("span",null,h("i",{style:"background:color-mix(in oklab,var(--school) 55%,var(--surface))"}),"Major course"),h("span",null,"✓ Completed"),h("span",null,h("i",{style:"outline:2px solid var(--school)"}),"Current semester"),h("span",null,"Course names from the West Point Redbook")));
   return c
+}
+/* ---------- PROJECTS ---------- */
+function viewProjects(v){
+  const P=S.docs.projects.projects||[];
+  if(S.ui.project){const p=P.find(x=>x.id===S.ui.project);if(p)return p.type==="movies"?viewMovies(v,p):null;S.ui.project=null}
+  v.append(h("header",null,h("div",{class:"eyebrow",style:"--c:var(--vb)"},"Side quests & collabs"),h("h1",null,"Projects"),h("p",{class:"sub"},"Things I'm building, tracking or competing at. Tap a project to explore it.")));
+  const g=h("div",{class:"trips"});
+  for(const p of P)g.append(h("button",{type:"button",class:"trip",onclick:()=>{S.ui.project=p.id;S.ui.armed=null;render();scrollTo(0,0)}},
+    h("div",{class:"cov",style:coverStyle(p)},h("div",null,h("h3",null,p.title),h("div",{style:"font-weight:600;font-size:.9rem;opacity:.95"},p.subtitle||""))),
+    h("div",{class:"tb"},h("div",{style:"font-weight:700"},p.type==="movies"?`${(S.docs.movies.list||[]).length} movies reviewed`:""),h("div",{class:"muted",style:"font-size:.86rem"},p.blurb||""))));
+  g.append(h("div",{class:"trip",style:"cursor:default;border-style:dashed;justify-content:center;align-items:center;padding:24px;text-align:center;min-height:200px"},h("div",{style:"font:800 1.2rem var(--display);text-transform:uppercase"},"Next project"),h("div",{class:"muted",style:"font-size:.88rem;max-width:30ch"},"Tell Claude about it and it gets its own page here.")));
+  v.append(g)
+}
+function mstats(L){
+  const n=L.length,avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
+  const A=L.map(x=>+x.a),B=L.map(x=>+x.b),M=L.map(x=>(+x.a+ +x.b)/2),R=L.map(x=>+x.rt*100);
+  const mx=avg(R),my=avg(M);let sxy=0,sxx=0,syy=0;L.forEach((x,i)=>{sxy+=(R[i]-mx)*(M[i]-my);sxx+=(R[i]-mx)**2;syy+=(M[i]-my)**2});
+  const r=sxx&&syy?sxy/Math.sqrt(sxx*syy):0,slope=sxx?sxy/sxx:0,icpt=my-slope*mx;
+  return{n,avgA:avg(A),avgB:avg(B),avgM:avg(M),avgRT:mx,ties:L.filter(x=>+x.a===+x.b).length,aHigher:L.filter(x=>+x.a>+x.b).length,bHigher:L.filter(x=>+x.b>+x.a).length,r,slope,icpt}
+}
+const mavg=x=>(+x.a+ +x.b)/2;
+function moviesScatter(L,st,names){
+  const W=640,H=420,ml=44,mr=16,mt=20,mb=40;const ys=L.map(mavg);const y0=Math.floor(Math.min(6,...ys)*2)/2,y1=10;
+  const X=v=>ml+(W-ml-mr)*v/100,Y=v=>mt+(H-mt-mb)*(1-(v-y0)/(y1-y0));
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Our average score versus Rotten Tomatoes score for each movie">`;
+  for(let v=y0;v<=y1+1e-9;v+=0.5){if(Math.abs(v%1)<1e-9||v===y0)s+=`<line class="gl" x1="${ml}" x2="${W-mr}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${ml-6}" y="${Y(v)+4}" text-anchor="end">${v}</text>`}
+  for(let v=0;v<=100;v+=25)s+=`<line class="gl" x1="${X(v)}" x2="${X(v)}" y1="${mt}" y2="${H-mb}" opacity=".6"/><text x="${X(v)}" y="${H-mb+16}" text-anchor="middle">${v}%</text>`;
+  s+=`<text x="${(ml+W-mr)/2}" y="${H-4}" text-anchor="middle">Rotten Tomatoes score</text><text x="12" y="${mt-6}">Our avg</text>`;
+  s+=`<text x="${X(2)}" y="${Y(y1)+14}" style="font:800 12px var(--display);letter-spacing:.06em;fill:var(--vb)">GUILTY PLEASURES ↖</text><text x="${X(98)}" y="${Y(y0)-8}" text-anchor="end" style="font:800 12px var(--display);letter-spacing:.06em;fill:var(--about)">↘ CRITICS LIKED IT MORE</text>`;
+  const ty=v=>st.icpt+st.slope*v;s+=`<line x1="${X(0)}" y1="${Y(Math.min(y1,Math.max(y0,ty(0))))}" x2="${X(100)}" y2="${Y(Math.min(y1,Math.max(y0,ty(100))))}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 5"/>`;
+  s+=`<text x="${W-mr}" y="${Y(Math.min(y1,Math.max(y0,ty(100))))-8}" text-anchor="end">trend · r = ${st.r.toFixed(2)}</text>`;
+  const res=L.map(x=>({x,d:mavg(x)/10-+x.rt})).sort((p,q)=>q.d-p.d);const lab=new Set([...res.slice(0,3),...res.slice(-2)].map(o=>o.x));const boxes=L.map(x=>[X(x.rt*100)-7,Y(mavg(x)),14]);
+  for(const x of L){const cx=X(x.rt*100),cy=Y(mavg(x));s+=`<circle cx="${cx}" cy="${cy}" r="6" fill="var(--vb)" stroke="var(--surface)" stroke-width="2"/>`;
+    if(lab.has(x)){const tw=x.title.length*6.4;let ok=false,right=cx<W*0.6;
+      for(const side of [right,!right]){const bx=side?cx+10:cx-10-tw;if(bx<ml||bx+tw>W-mr)continue;if(!boxes.some(q=>bx<q[0]+q[2]&&bx+tw>q[0]&&Math.abs(cy-q[1])<15)){boxes.push([bx,cy,tw]);right=side;ok=true;break}}
+      if(ok)s+=`<text class="lab" x="${cx+(right?10:-10)}" y="${cy+4}" text-anchor="${right?"start":"end"}" style="font:700 11.5px var(--body);fill:var(--ink)">${esc(x.title)}</text>`}
+    s+=`<circle cx="${cx}" cy="${cy}" r="13" fill="transparent" data-tip="${esc(x.title)}: ${mavg(x)} avg (${names.a} ${x.a}, ${names.b} ${x.b}) · RT ${Math.round(x.rt*100)}%"/>`}
+  return s+`</svg>`
+}
+function moviesDiverge(L,names){
+  const rows=L.slice().sort((p,q)=>(q.a-q.b)-(p.a-p.b)||mavg(q)-mavg(p));const rh=19,lw=200,W=640,mt=26,H=mt+rows.length*rh+10;const cx=lw+(W-lw)/2,half=(W-lw)/2-30;
+  const mx=Math.max(1,...rows.map(x=>Math.abs(x.a-x.b)));const sc=v=>v/mx*half;
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Score difference per movie: ${names.a} minus ${names.b}">`;
+  s+=`<text x="${cx-8}" y="14" text-anchor="end" style="font:700 11px var(--body);fill:var(--ink)">◀ ${esc(names.b)} higher</text><text x="${cx+8}" y="14" style="font:700 11px var(--body);fill:var(--ink)">${esc(names.a)} higher ▶</text>`;
+  s+=`<line x1="${cx}" x2="${cx}" y1="${mt-4}" y2="${H-6}" stroke="var(--line)" stroke-width="1.5"/>`;
+  rows.forEach((x,i)=>{const y=mt+i*rh,d=x.a-x.b;s+=`<text x="${lw-8}" y="${y+13}" text-anchor="end" style="font:600 11.5px var(--body);fill:var(--ink)">${esc(x.title.length>26?x.title.slice(0,25)+"…":x.title)}</text>`;
+    if(d===0)s+=`<path d="M${cx},${y+4} l5,5 -5,5 -5,-5z" fill="var(--muted)"/>`;
+    else{const w=sc(Math.abs(d)),x0=d>0?cx+1:cx-1-w;const r=Math.min(4,w/2);s+=d>0?`<path d="M${x0},${y+3}H${x0+w-r}Q${x0+w},${y+3} ${x0+w},${y+3+r}V${y+15-r}Q${x0+w},${y+15} ${x0+w-r},${y+15}H${x0}Z" fill="var(--pA)"/>`:`<path d="M${x0+w},${y+3}H${x0+r}Q${x0},${y+3} ${x0},${y+3+r}V${y+15-r}Q${x0},${y+15} ${x0+r},${y+15}H${x0+w}Z" fill="var(--pB)"/>`;
+      s+=`<text x="${d>0?x0+w+5:x0-5}" y="${y+13}" text-anchor="${d>0?"start":"end"}" class="num">${d>0?"+":"−"}${Math.abs(d)}</text>`}
+    s+=`<rect x="0" y="${y}" width="${W}" height="${rh}" fill="transparent" data-tip="${esc(x.title)}: ${names.a} ${x.a} · ${names.b} ${x.b}${d===0?" (same score)":""}"/>`});
+  return s+`</svg>`
+}
+function viewMovies(v,p){
+  const M=S.docs.movies,L=M.list||[],na=M.a.name,nb=M.b.name,names={a:na,b:nb};const Lrt=L.filter(x=>x.rt!=null);const st=Object.assign(mstats(L),(({r,slope,icpt,avgRT})=>({r,slope,icpt,avgRT}))(mstats(Lrt)));
+  v.append(h("div",null,h("button",{type:"button",class:"ghost",onclick:()=>{S.ui.project=null;render()}},"← All projects")));
+  v.append(h("section",{class:"thero",style:coverStyle(p)},h("div",{class:"big"},h("b",null,st.avgM.toFixed(1)),h("small",null,"avg score / 10")),
+    h("div",{style:"min-width:0"},h("div",{class:"eyebrow",style:"color:rgba(255,255,255,.9)"},`${st.n} movies · rated out of 10`),h("h1",null,p.title),h("div",{style:"font-weight:700;margin-top:6px"},`${na} (${M.a.alias}) vs. ${nb} (${M.b.alias})`))));
+  if(!L.length){v.append(h("div",{class:"empty"},"No movies yet."));return}
+  const tough=st.avgA<st.avgB?na:nb;
+  v.append(h("section",{class:"card"},h("div",{class:"card-h"},h("h2",null,"Head to head"),h("span",{class:"muted",style:"font-size:.86rem"},`${tough} is the tougher critic`)),
+    h("div",{class:"vs"},h("div",{class:"vsd",style:"--c:var(--pA)"},h("div",{class:"eyebrow",style:"--c:var(--ink)"},h("span",{class:"sw",style:"background:var(--pA)"}),`${na} · "${M.a.alias}"`),h("div",{class:"v"},st.avgA.toFixed(2)),h("div",{class:"muted",style:"font-size:.86rem"},`average · rated higher on ${st.aHigher}`)),
+      h("div",{class:"mid"},"VS"),
+      h("div",{class:"vsd",style:"--c:var(--pB)"},h("div",{class:"eyebrow",style:"--c:var(--ink)"},h("span",{class:"sw",style:"background:var(--pB)"}),`${nb} · "${M.b.alias}"`),h("div",{class:"v"},st.avgB.toFixed(2)),h("div",{class:"muted",style:"font-size:.86rem"},`average · rated higher on ${st.bHigher}`))),
+    h("div",{class:"grid g3",style:"margin-top:12px"},h("div",{class:"stat"},h("div",{class:"v"},st.ties),h("div",{class:"k"},"movies you scored exactly the same")),h("div",{class:"stat"},h("div",{class:"v"},Math.round(st.avgRT)+"%"),h("div",{class:"k"},"average Rotten Tomatoes score")),h("div",{class:"stat"},h("div",{class:"v"},st.r.toFixed(2)),h("div",{class:"k"},"correlation with the critics (r). Near 0 means you ignore them")))));
+  /* verdict */
+  const by=f=>L.slice().sort((p2,q)=>f(q)-f(p2));const top=by(mavg)[0],low=by(x=>-mavg(x))[0],split=by(x=>Math.abs(x.a-x.b))[0],fa=by(x=>+x.a+mavg(x)/100)[0],fb=by(x=>+x.b+mavg(x)/100)[0],byR=f=>Lrt.slice().sort((p2,q)=>f(q)-f(p2)),gp=byR(x=>mavg(x)/10-x.rt)[0]||top,cd=byR(x=>x.rt-mavg(x)/10)[0]||low;
+  const card=(lbl,t,sub,c)=>h("div",{class:"vd"},h("div",{class:"eyebrow",style:`--c:${c||"var(--vb)"}`},lbl),h("div",{class:"t2"},t),h("div",{class:"s2"},sub));
+  v.append(h("section",{class:"card"},h("div",{class:"card-h"},h("h2",null,"The verdicts")),h("div",{class:"verdict"},
+    card("Best of the bunch",top.title,`${mavg(top)} average · ${na} ${top.a}, ${nb} ${top.b}`),
+    card("Biggest argument",split.title,`${na} ${split.a} vs. ${nb} ${split.b} · ${Math.abs(split.a-split.b)} points apart`,"var(--about)"),
+    card("Guilty pleasure",gp.title,`You gave it ${mavg(gp)}; critics gave it ${Math.round(gp.rt*100)}%`),
+    card(`${na}'s pick`,fa.title,`${na} gave it ${fa.a}`,"var(--pA)"),
+    card(`${nb}'s pick`,fb.title,`${nb} gave it ${fb.b}`,"var(--pB)"),
+    card("Critics loved it more",cd.title,`${Math.round(cd.rt*100)}% on Rotten Tomatoes; you gave it ${mavg(cd)}`,"var(--about)"))));
+  /* charts */
+  v.append(h("section",{class:"grid",style:"gap:16px"},
+    h("div",{class:"card"},h("div",{class:"card-h"},h("h2",null,"Us vs. the critics"),h("span",{class:"muted",style:"font-size:.84rem"},"Each dot is a movie")),h("div",{html:moviesScatter(Lrt,st,names)})),
+    h("div",{class:"card"},h("div",{class:"card-h"},h("h2",null,"Who liked it more")),h("div",{html:moviesDiverge(L,names)}))));
+  /* table */
+  const so=S.ui.mvSort||{k:"n",d:1};const q=(S.ui.mvQ||"").toLowerCase();
+  const keyf={n:x=>+x.n,title:x=>x.title.toLowerCase(),a:x=>+x.a,b:x=>+x.b,avg:mavg,rt:x=>x.rt==null?-1:+x.rt,gap:x=>Math.abs(x.a-x.b)};
+  let rows=L.filter(x=>!q||x.title.toLowerCase().includes(q)).sort((p2,q2)=>{const A=keyf[so.k](p2),B=keyf[so.k](q2);return(A>B?1:A<B?-1:0)*so.d});
+  const th=(k,l)=>h("th",null,h("button",{type:"button","aria-sort":so.k===k?(so.d>0?"ascending":"descending"):null,onclick:()=>{S.ui.mvSort={k,d:so.k===k?-so.d:(k==="title"||k==="n"?1:-1)};render()}},l+(so.k===k?(so.d>0?" ▲":" ▼"):"")));
+  const scell=(val,c)=>h("div",{class:"sc"},h("b",null,val),h("div",{class:"tr"},h("i",{style:`width:${val*10}%;--c:${c}`})));
+  const tb=h("tbody");
+  for(const x of rows)tb.append(h("tr",null,h("td",{class:"n muted"},x.n),h("td",{class:"ttl"},x.title),h("td",null,scell(+x.a,"var(--pA)")),h("td",null,scell(+x.b,"var(--pB)")),h("td",{class:"n",style:"font:900 1.05rem var(--display)"},mavg(x)),h("td",{class:"n"},x.rt==null?"—":Math.round(x.rt*100)+"%"),h("td",{class:"n muted"},x.a===x.b?"Same":Math.abs(x.a-x.b)),h("td",null,delBtn("mv"+x.n+x.title,"×",()=>{M.list=M.list.filter(y=>y!==x);save("movies")}))));
+  const tc=h("section",{class:"card"},h("div",{class:"card-h"},h("h2",null,"The full list"),h("input",{type:"search",id:"mv-q",placeholder:"Search movies",value:S.ui.mvQ||"",style:"max-width:220px",oninput:e=>{S.ui.mvQ=e.target.value;const pos=e.target.selectionStart;render();const el=$("#mv-q");if(el){el.focus();el.setSelectionRange(pos,pos)}}})),
+    h("div",{style:"overflow-x:auto"},h("table",{class:"mvt"},h("thead",null,h("tr",null,th("n","#"),th("title","Movie"),th("a",na),th("b",nb),th("avg","Avg"),th("rt","RT"),th("gap","Gap"),h("th",null,""))),tb)));
+  tc.append(h("h3",{style:"margin:18px 0 8px"},"Log a new movie"),h("form",{class:"f",onsubmit:e=>{e.preventDefault();const f=e.target;const t=f.title.value.trim(),a=parseFloat(f.a.value),b=parseFloat(f.b.value),rt=parseFloat(f.rt.value);
+      if(!t||!(a>=0&&a<=10)||!(b>=0&&b<=10)){toast("Scores go from 0 to 10");return}
+      M.list.push({n:Math.max(0,...M.list.map(x=>+x.n))+1,title:t,a,b,rt:isNaN(rt)?null:rt/100});save("movies");if((a+b)/2>=9)hype("Instant classic!",e);else toast("Added to the list");render()}},
+    h("label",{class:"fld w2"},h("span",null,"Movie"),h("input",{name:"title",id:"mv-title",required:true})),h("label",{class:"fld s"},h("span",null,`${na} /10`),h("input",{name:"a",id:"mv-a",type:"number",step:"0.5",min:"0",max:"10",required:true})),
+    h("label",{class:"fld s"},h("span",null,`${nb} /10`),h("input",{name:"b",id:"mv-b",type:"number",step:"0.5",min:"0",max:"10",required:true})),h("label",{class:"fld s"},h("span",null,"Rotten Tomatoes %"),h("input",{name:"rt",id:"mv-rt",type:"number",min:"0",max:"100"})),
+    h("button",{class:"btn",type:"submit",style:"--c:var(--vb)"},"Add movie")));
+  v.append(tc)
 }
 /* ---------- theme ---------- */
 const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
